@@ -2,6 +2,7 @@ package com.miguelmuniz.config;
 
 import com.miguelmuniz.domain.Post;
 import com.miguelmuniz.domain.User;
+import com.miguelmuniz.dto.AuthorDTO;
 import com.miguelmuniz.repository.PostRepository;
 import com.miguelmuniz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,12 @@ public class Instantiation implements CommandLineRunner {
         User alex = new User(null, "Alex Green", "alex@gmail.com");
         User bob = new User(null, "Bob Grey", "bob@gmail.com");
 
-        Post post1 = new Post(null, Instant.now(),"Partiu Viagem", "Vou viajar para São paulo",maria);
-        Post post2 = new Post(null, Instant.now().plusSeconds(60),"Bom dia", "Acordei Feliz Hoje",maria);
-
         userRepository.saveAll(Arrays.asList(maria, alex, bob));
+
+        Post post1 = new Post(null, Instant.now(),"Partiu Viagem", "Vou viajar para São paulo",new AuthorDTO(maria));
+        Post post2 = new Post(null, Instant.now().plusSeconds(60),"Bom dia", "Acordei Feliz Hoje",new AuthorDTO(maria));
+
+
         postRepository.saveAll(Arrays.asList(post1,post2));
 
 

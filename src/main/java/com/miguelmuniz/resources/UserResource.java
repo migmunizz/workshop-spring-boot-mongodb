@@ -5,6 +5,8 @@ import com.miguelmuniz.domain.User;
 import com.miguelmuniz.dto.UserDTO;
 import com.miguelmuniz.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,10 +24,9 @@ public class UserResource {
     private UserService service;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findAll(){
-        List<User> list = service.findAll();
-        List<UserDTO> listDTO = list.stream().map(UserDTO::new).toList();
-        return ResponseEntity.ok().body(listDTO);
+    public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable){
+        Page<UserDTO> page = service.findAll(pageable);
+        return ResponseEntity.ok().body(page);
     }
 
     @GetMapping(value = "/{id}")

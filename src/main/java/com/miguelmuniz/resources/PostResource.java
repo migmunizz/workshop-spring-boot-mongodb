@@ -7,6 +7,8 @@ import com.miguelmuniz.resources.util.URL;
 import com.miguelmuniz.services.PostService;
 import com.miguelmuniz.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,9 +27,9 @@ public class PostResource {
     private PostService service;
 
     @GetMapping
-    public ResponseEntity<List<Post>> findAll(){
-        List<Post> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<Post>> findAll(Pageable pageable){
+        Page<Post> page = service.findAll(pageable);
+        return ResponseEntity.ok().body(page);
     }
 
     @GetMapping(value = "/{id}")
@@ -37,17 +39,17 @@ public class PostResource {
     }
 
     @GetMapping(value = "/titlesearch")
-    public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text",defaultValue = "") String text){
+    public ResponseEntity<Page<Post>> findByTitle(@RequestParam(value = "text",defaultValue = "") String text, Pageable pageable){
         text = URL.decodeParam(text);
-        List<Post> list = service.findByTitle(text);
-        return ResponseEntity.ok().body(list);
+        Page<Post> page = service.findByTitle(text,pageable);
+        return ResponseEntity.ok().body(page);
     }
 
     @GetMapping("/fullsearch")
-    public ResponseEntity<List<Post>> fullSearch(
+    public ResponseEntity<Page<Post>> fullSearch(
             @RequestParam(value = "text", defaultValue = "") String text,
             @RequestParam(value = "minDate", defaultValue = "") String minDate,
-            @RequestParam(value = "maxDate", defaultValue = "") String maxDate) {
+            @RequestParam(value = "maxDate", defaultValue = "") String maxDate, Pageable pageable) {
 
         text = URL.decodeParam(text);
 
@@ -58,9 +60,9 @@ public class PostResource {
                 Instant.now().atZone(ZoneId.systemDefault()).plusDays(1).toInstant()
         );
 
-        List<Post> list = service.fullSearch(text, min, max);
+        Page<Post> page = service.fullSearch(text, min, max,pageable);
 
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(page);
     }
 
 

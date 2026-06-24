@@ -5,6 +5,8 @@ import com.miguelmuniz.dto.UserDTO;
 import com.miguelmuniz.repository.UserRepository;
 import com.miguelmuniz.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,9 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    public List<User> findAll() {
-        return repo.findAll();
+    public Page<UserDTO> findAll(Pageable pageable) {
+        Page<User> page = repo.findAll(pageable);
+        return page.map(UserDTO::new);
     }
 
     public User findById(String id) {

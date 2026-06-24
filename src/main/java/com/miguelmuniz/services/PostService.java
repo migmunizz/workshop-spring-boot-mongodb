@@ -7,6 +7,8 @@ import com.miguelmuniz.repository.PostRepository;
 import com.miguelmuniz.repository.UserRepository;
 import com.miguelmuniz.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,8 +22,8 @@ public class PostService {
     @Autowired
     private PostRepository repo;
 
-    public List<Post> findAll(){
-        return repo.findAll();
+    public Page<Post> findAll(Pageable pageable){
+        return repo.findAll(pageable);
     }
 
     public Post findById(String id) {
@@ -30,12 +32,12 @@ public class PostService {
                 new ObjectNotFoundException("Object not found"));
     }
 
-    public List<Post> findByTitle(String text){
-        return repo.findByTitle(text);
+    public Page<Post> findByTitle(String text,Pageable pageable){
+        return repo.findByTitle(text,pageable);
     }
 
-    public List<Post> fullSearch(String text, Instant minDate, Instant maxDate){
-        return repo.fullSearch(text,minDate,maxDate);
+    public Page<Post> fullSearch(String text, Instant minDate, Instant maxDate,Pageable pageable){
+        return repo.fullSearch(text,minDate,maxDate,pageable);
 
 
     }

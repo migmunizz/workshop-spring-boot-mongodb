@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -38,6 +40,26 @@ public class PostResource {
     public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text",defaultValue = "") String text){
         text = URL.decodeParam(text);
         List<Post> list = service.findByTitle(text);
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/fullsearch")
+    public ResponseEntity<List<Post>> fullSearch(
+            @RequestParam(value = "text", defaultValue = "") String text,
+            @RequestParam(value = "minDate", defaultValue = "") String minDate,
+            @RequestParam(value = "maxDate", defaultValue = "") String maxDate) {
+
+        text = URL.decodeParam(text);
+
+        Instant min = URL.convertDate(minDate, Instant.EPOCH);
+
+        Instant max = URL.convertDate(
+                maxDate,
+                Instant.now().atZone(ZoneId.systemDefault()).plusDays(1).toInstant()
+        );
+
+        List<Post> list = service.fullSearch(text, min, max);
+
         return ResponseEntity.ok().body(list);
     }
 

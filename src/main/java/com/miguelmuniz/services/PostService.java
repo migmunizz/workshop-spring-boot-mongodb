@@ -9,6 +9,8 @@ import com.miguelmuniz.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,12 @@ public class PostService {
 
     public List<Post> findByTitle(String text){
         return repo.findByTitle(text);
+    }
+
+    public List<Post> fullSearch(String text, Instant minDate, Instant maxDate){
+        return repo.fullSearch(text,minDate,maxDate);
+
+
     }
 
 }

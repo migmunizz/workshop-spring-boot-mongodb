@@ -3,31 +3,41 @@ package com.miguelmuniz.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @Document
-public class User {
+public class User implements UserDetails {
 
     @Id
     private String id;
 
     private String name;
     private String email;
-
+    private String password;
     @DBRef(lazy = true)
     private List<Post> posts = new ArrayList<>();
 
 
+    public User(String id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
     public User() {
     }
 
-    public User(String id, String name,String email ) {
+    public User(String id, String name,String email,String password ) {
         this.email = email;
         this.name = name;
         this.id = id;
+        this.password = password;
     }
 
     public String getId() {
@@ -58,6 +68,10 @@ public class User {
         return posts;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
 
     @Override
@@ -73,4 +87,18 @@ public class User {
         return Objects.hashCode(id);
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

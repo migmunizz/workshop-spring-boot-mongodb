@@ -1,6 +1,7 @@
 package com.miguelmuniz.auth;
 
-public record LoginRequest(
+public record RegisterRequest(
+        String name,
         String email,
         String password
 ) {

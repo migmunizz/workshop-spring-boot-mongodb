@@ -49,7 +49,7 @@ import org.springframework.stereotype.Service;
         public AuthResponse register(RegisterRequest request) {
 
             if (repo.findByEmail(request.email()).isPresent()) {
-                throw new RuntimeException("Email already registered");
+                throw new IllegalArgumentException("Email already registered");
             }
 
             User user = new User(
